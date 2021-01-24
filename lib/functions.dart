@@ -24,14 +24,13 @@ FutureOr<Response> function(Request request) async {
   final autoRefreshingClient =
       await clientViaApplicationDefaultCredentials(scopes: []);
 
-  final secret = Secret()
-    ..name = 'SecretName'
-    ..replication = Automatic();
-
   final secretManagerApi = SecretmanagerApi(autoRefreshingClient);
-  final createdSecret = await secretManagerApi.projects.secrets
-      .create(secret, 'projects/the-process-tool', secretId: 'foobar');
-  print(createdSecret.name);
+  final listSecretsResponse =
+      await secretManagerApi.projects.secrets.list('projects/256145062869');
+
+  print(listSecretsResponse.secrets.first);
+
+  // projects/256145062869/secrets/auth-providers
 
   print('Exchanging code for tokens...');
 

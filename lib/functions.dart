@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:functions_framework/functions_framework.dart';
 
@@ -25,13 +26,16 @@ FutureOr<Response> function(Request request) async {
       await clientViaApplicationDefaultCredentials(scopes: []);
 
   final secretManagerApi = SecretmanagerApi(autoRefreshingClient);
-  final listSecretsResponse =
-      await secretManagerApi.projects.secrets.list('projects/256145062869');
+  final accessSecretVersionResponse = await secretManagerApi
+      .projects.secrets.versions
+      .access('projects/256145062869/secrets/auth-providers/versions/latest');
 
-  print(listSecretsResponse.secrets.first);
+  final jsonPayload =
+      json.decode(utf8.decode(accessSecretVersionResponse.payload.dataAsBytes))
+          as Map<String, Object>;
 
-  // projects/256145062869/secrets/auth-providers
-
+  print(jsonPayload['google']);
+  // print(json.encode(secret.toJson()));
   print('Exchanging code for tokens...');
 
   // Build the post string from an object

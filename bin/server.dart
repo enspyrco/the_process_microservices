@@ -1,3 +1,5 @@
+// @dart=2.9
+
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
@@ -14,14 +16,15 @@
 // limitations under the License.
 
 import 'package:functions_framework/serve.dart';
-import 'package:shelf/shelf.dart';
-
-import 'package:the_process_microservices/functions.dart' as function_library;
+import 'package:authorization/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functions);
+  await serve(args, _functionTargets);
 }
 
-const _functions = <String, Handler>{
-  'function': function_library.function,
+const _functionTargets = <FunctionTarget>{
+  FunctionTarget.http(
+    'function',
+    function_library.function,
+  ),
 };

@@ -1,6 +1,8 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:authorization/src/auth_credentials/auth_provider_project_credentials.dart';
 import 'package:functions_framework/functions_framework.dart';
 
 import 'package:shelf/shelf.dart';
@@ -30,12 +32,11 @@ FutureOr<Response> function(Request request) async {
       .projects.secrets.versions
       .access('projects/256145062869/secrets/auth-providers/versions/latest');
 
-  final jsonPayload =
-      json.decode(utf8.decode(accessSecretVersionResponse.payload.dataAsBytes))
-          as Map<String, Object>;
+  final credentials = AuthProviderProjectCredentials.fromJson(
+      utf8.decode(accessSecretVersionResponse.payload.dataAsBytes));
 
-  print(jsonPayload['google']);
-  // print(json.encode(secret.toJson()));
+  print(credentials.toJson());
+
   print('Exchanging code for tokens...');
 
   // Build the post string from an object
